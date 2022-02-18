@@ -85,7 +85,7 @@ public class SetModule extends AppCompatActivity {
         _selected = new ArrayList<>();
         _solution = SetSet.getRandom(true);
         HashSet<SetCard> cards = new HashSet<>(_solution.getCards());
-
+        //Issue is most likely somehow generating a second valid set that is mutually exclusive to the solution set
             int iter = 0;
             while (cards.size() < 9) {
                 SetCard newCard = SetCard.getRandom();
