@@ -5,11 +5,151 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class CoordinatesModule extends AppCompatActivity {
-
+    Button submit;
+    boolean _currentTextIs1;
+    List<ClueFragment> clues; // Also clues are stupid as frags.
+    int _selectedIndex;
+    Integer _firstCorrectSubmitted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coordinates_module);
+    }
+    private void start() {
+    
+
+        _clues = new ArrayList<Clue>();
+
+        // Add the size indication
+        int sizeSystem = MainActivity.random.nextInt(5);
+        int[] primes = new int[] { 3, 5, 7 };
+        //ayo wtf
+        // ok so
+        // Enumerables.Range(start, count) creates a pythonlike range from start and including count elements
+        var size = Enumerable.Range(3, 5) // 3, 4, 5, 6, 7
+            .SelectMany(
+                width => Enumerable.Range(3, 5)
+                    .Select(
+                        height => new { Width = width, Height = height }
+                    )
+            ) // this whole block was to create the objects with widths and heights spanning (w, h) elem of {3..7}^2
+            .Where(sz => sizeSystem != 0 || (primes.Contains(sz.Width) && primes.Contains(sz.Height))) //Then if sizeSystem isn't zero, pick one at random, otherwise, pick an exclusively prime one
+            .PickRandom();
+
+        
+        ClueFragment clue = null;
+        
+        switch (sizeSystem)
+        {
+            case 0: clue = new Clue((size.Width > size.Height ? "%1$d" : size.Width < size.Height ? "(%1$d)" : Rnd.Range(0, 2) == 0 ? "%1$d" : "(%1$d)").Fmt(size.Width * size.Height), false, false, 128); break;
+            case 1: clue = new Clue("%1$d×%2$d".Fmt(size.Width, size.Height), false, false, 128, null, "%1$dx%2$d".Fmt(size.Width, size.Height)); break;
+            case 2: clue = new Clue("%2$d by %1$d".Fmt(size.Width, size.Height), false, false, 128); break;
+            case 3: clue = new Clue("%1$d*%2$d".Fmt(size.Width * size.Height, size.Height), false, false, 128); break;
+            case 4: clue = new Clue("%1$d : %2$d".Fmt(size.Width * size.Height, size.Width), false, false, 128); break;
+        }
+        _clues.Add(clue);
+        /*
+        Debug.LogFormat(@"[Coordinates #{3}] Showing grid size %1$d×%2$d as {2}", size.Width, size.Height, clue.LoggingText, _moduleId);
+
+        var coordCh = 'a';
+        var grid = new char[size.Width * size.Height];
+        for (int i = 0; i < size.Width * size.Height; i++)
+            grid[i] = '.';
+
+        var coordinates = Enumerable.Range(0, size.Width * size.Height).ToList();
+        coordinates.Shuffle();
+        var illegalCoords = new List<int>();
+        var num = 0;
+
+        // Generate 6 illegal coordinates
+        for (; num < 6; num++)
+        {
+            illegalCoords.Add(coordinates[num]);
+            clue = addClue(false, coordinates[num], size.Width, size.Height);
+            Debug.LogFormat(@"[Coordinates #{3}] Showing illegal coordinate %1$d=%2$d as {2}", coordCh, loggingCoords(coordinates[num], size.Width), clue.LoggingText, _moduleId);
+            grid[coordinates[num]] = coordCh;
+            coordCh++;
+        }
+
+        // Generate the correct coordinate twice with different coordinate systems
+        clue = addClue(true, coordinates[num], size.Width, size.Height);
+        Debug.LogFormat(@"[Coordinates #%1$d] Showing correct coordinate *=%2$d as {2}", _moduleId, loggingCoords(coordinates[num], size.Width), clue.LoggingText);
+        clue = addClue(true, coordinates[num], size.Width, size.Height, avoidSystem: clue.System);
+        Debug.LogFormat(@"[Coordinates #%1$d] Showing correct coordinate *=%2$d as {2}", _moduleId, loggingCoords(coordinates[num], size.Width), clue.LoggingText);
+        grid[coordinates[num]] = '*';
+
+        // Log the grid
+        Debug.LogFormat("[Coordinates #%1$d] Grid:\n%2$d", _moduleId, Enumerable.Range(0, size.Height).Select(row =>
+            (grid[size.Width * row] == '*' ? "" : " ") +
+            Enumerable.Range(0, size.Width)
+                .Select(col => new { Char = grid[col + size.Width * row], Col = col, Coord = col + size.Width * row })
+                .Select(inf => inf.Char == '*' ? "[*]" : (inf.Char != '.' ? inf.Char : illegalCoords.Contains(inf.Coord) ? '#' : '.') + (inf.Col == size.Width - 1 || grid[inf.Col + 1 + size.Width * row] == '*' ? "" : " "))
+                .JoinString())
+            .JoinString("\n"));
+
+        _clues.Shuffle();
+
+        _selectedIndex = 0;
+        _firstCorrectSubmitted = null;
+
+        Left.OnInteract = delegate
+        {
+            Left.AddInteractionPunch(.5f);
+            Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, Left.transform);
+            StartCoroutine(ButtonAnimation(Left));
+            if (_clues == null)
+                return false;
+
+            _selectedIndex = (_selectedIndex + _clues.Count - 1) % _clues.Count;
+            UpdateDisplay(false);
+            return false;
+        };
+
+        Right.OnInteract = delegate
+        {
+            Right.AddInteractionPunch(.5f);
+            Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, Right.transform);
+            StartCoroutine(ButtonAnimation(Right));
+            if (_clues == null)
+                return false;
+
+            _selectedIndex = (_selectedIndex + 1) % _clues.Count;
+            UpdateDisplay(true);
+            return false;
+        };
+
+        Submit.OnInteract = delegate
+        {
+            Submit.AddInteractionPunch(1f);
+            Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, Submit.transform);
+            StartCoroutine(ButtonAnimation(Submit));
+            if (_clues == null)
+                return false;
+
+            if (_clues[_selectedIndex].IsCorrect && (_firstCorrectSubmitted == null || _firstCorrectSubmitted == _selectedIndex))
+            {
+                Debug.LogFormat("[Coordinates #%1$d] Pressed submit button on %2$d: first correct answer.", _moduleId, _clues[_selectedIndex].LoggingText);
+                _firstCorrectSubmitted = _selectedIndex;
+            }
+            else if (_clues[_selectedIndex].IsCorrect)
+            {
+                Debug.LogFormat("[Coordinates #%1$d] Pressed submit button on %2$d: second correct answer. Module solved.", _moduleId, _clues[_selectedIndex].LoggingText);
+                Module.HandlePass();
+                _clues = null;
+            }
+            else
+            {
+                Debug.LogFormat("[Coordinates #
+                ] Pressed submit button on wrong answer %2$d.", _moduleId, _clues[_selectedIndex].LoggingText);
+                Module.HandleStrike();
+            }
+
+            return false;
+        };
+
+        UpdateDisplay(true);
+    }
+    */
     }
 }
 /*
