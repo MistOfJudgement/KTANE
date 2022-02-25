@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/1499106/AndroidStudioProjects/KTANE/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2552083333333333" />
+        <entry key="..\:/Users/1499106/AndroidStudioProjects/KTANE/app/src/main/res/layout/activity_coordinates_module.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/1499106/AndroidStudioProjects/KTANE/app/src/main/res/layout/activity_main.xml" value="0.16259057971014493" />
+        <entry key="..\:/Users/1499106/AndroidStudioProjects/KTANE/app/src/main/res/layout/fragment_clue.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/1499106/AndroidStudioProjects/KTANE/app/src/main/res/layout/set_layout.xml" value="0.24365942028985507" />
       </map>
     </option>
