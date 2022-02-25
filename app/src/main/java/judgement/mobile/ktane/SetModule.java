@@ -35,7 +35,7 @@ public class SetModule extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.set_layout);
+        setContentView(R.layout.activity_set_module);
 
         sharedPreferences = getSharedPreferences(MainActivity.TAG, MODE_PRIVATE);
         editor = sharedPreferences.edit();
