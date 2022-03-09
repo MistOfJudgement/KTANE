@@ -26,14 +26,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/tx_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="transmit"
         android:text="TX"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+        app:layout_constraintTop_toBottomOf="@+id/freq_view_pager"
         tools:ignore="HardcodedText" />
 
     <View
@@ -49,32 +50,43 @@
         app:layout_constraintVertical_bias="0.702" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/freq_left_button"
         android:layout_width="51dp"
         android:layout_height="0dp"
-        android:text="<"
-        app:layout_constraintEnd_toStartOf="@+id/viewPager2"
+        android:text="&lt;"
+        app:layout_constraintBottom_toTopOf="@+id/tx_button"
+        app:layout_constraintEnd_toStartOf="@+id/freq_view_pager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/freq_right_button"
         android:layout_width="57dp"
         android:layout_height="0dp"
-        android:text=">"
+        android:text="&gt;"
+        app:layout_constraintBottom_toTopOf="@+id/tx_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/viewPager2"
+        app:layout_constraintStart_toEndOf="@+id/freq_view_pager"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:ignore="HardcodedText" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager2"
+        android:id="@+id/freq_view_pager"
         android:layout_width="301dp"
         android:layout_height="85dp"
-        android:background="#676767"
+        android:background="#1C1C1C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/morse_solve_count"
+        android:name="judgement.mobile.ktane.SolveCounterFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_solve_counter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

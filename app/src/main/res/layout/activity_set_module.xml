@@ -125,27 +125,12 @@
         app:layout_constraintTop_toBottomOf="@+id/imageButton5"
         app:srcCompat="@drawable/icona1a1" />
 
-    <TextView
-        android:id="@+id/solveCount"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/set_solve_count"
+        android:name="judgement.mobile.ktane.SolveCounterFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.958"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Solves Without Fail - "
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/solveCount"
-        app:layout_constraintEnd_toStartOf="@+id/solveCount"
-        app:layout_constraintTop_toTopOf="@+id/solveCount" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

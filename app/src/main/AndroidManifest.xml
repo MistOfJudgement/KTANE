@@ -9,9 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KTANE">
-        <activity
-            android:name=".MorseModule"
-            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,6 +22,10 @@
         <activity
             android:name=".SetModule"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MorseModule"
+            android:parentActivityName=".MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

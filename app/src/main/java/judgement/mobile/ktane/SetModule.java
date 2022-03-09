@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,18 +30,16 @@ public class SetModule extends AppCompatActivity {
     private boolean _isSolved;
     private int[] Symbols;
     private int[] SymbolsSelected;
-    public TextView solveCount;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    public SolveCounterFragment solves;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_module);
 
-        sharedPreferences = getSharedPreferences(MainActivity.TAG, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        solveCount = findViewById(R.id.solveCount);
+
+        solves = (SolveCounterFragment) getSupportFragmentManager().findFragmentById(R.id.set_solve_count);
 
         _cards = new ImageButton[9];
         for(int i = 0; i < _cards.length; i++) {
@@ -54,21 +54,7 @@ public class SetModule extends AppCompatActivity {
         }
         start();
     }
-    private void solveModule() {
-        editor.putInt("solves", sharedPreferences.getInt("solves", 0) + 1);
-        editor.apply();
-        solveCount.setText("" + sharedPreferences.getInt("solves", 0));
 
-        //wait method
-
-        start(); //regenerate puzzle
-        _isSolved = false;
-    }
-    private void strike() {
-        editor.putInt("solves", 0);
-        editor.apply();
-        solveCount.setText("0");
-    }
 
     @Override
     protected void onPause() {
@@ -122,6 +108,15 @@ public class SetModule extends AppCompatActivity {
                 coords(Arrays.asList(_displayedCards).indexOf(_solution.getThree()))));
 
 
+    }
+    private void solveModule() {
+        solves.solveModule();
+
+        start(); //regenerate puzzle
+        _isSolved = false;
+    }
+    private void strike() {
+        solves.strike();
     }
     private boolean any(Collection<SetCard> cards, Predicate<SetCard> func) {
         for (SetCard element: cards) {
